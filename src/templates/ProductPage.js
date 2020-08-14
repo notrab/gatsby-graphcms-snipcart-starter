@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql } from "gatsby";
-
+import { MDXRenderer } from "gatsby-plugin-mdx";
 import Img from "gatsby-image";
 
 export const pageQuery = graphql`
@@ -9,8 +9,13 @@ export const pageQuery = graphql`
       id
       name
       price
-      content {
-        markdown
+      formattedPrice
+      description {
+        markdownNode {
+          childMdx {
+            body
+          }
+        }
       }
       image {
         url
@@ -28,31 +33,42 @@ export const pageQuery = graphql`
 
 export default function ProductPage({ data: { graphCmsProduct }, location }) {
   const { href } = location;
-  const { id, name, price, content, image } = graphCmsProduct;
+  const {
+    id,
+    name,
+    price,
+    formattedPrice,
+    description,
+    image,
+  } = graphCmsProduct;
 
   return (
     <React.Fragment>
       <h1>{name}</h1>
+      <p>{formattedPrice}</p>
 
       {image && (
         <Img
-          style={{ width: 250 }}
           fluid={image.localFile.childImageSharp.fluid}
+          fadeIn={false}
           alt={name}
           title={name}
+          style={{ width: 250 }}
         />
       )}
 
       <button
         className="snipcart-add-item"
         data-item-id={id}
-        data-item-price={price}
+        data-item-price={price / 100}
         data-item-url={href}
         data-item-image={image.url}
         data-item-name={name}
       >
         Add to cart
       </button>
+
+      <MDXRenderer>{description.markdownNode.childMdx.body}</MDXRenderer>
     </React.Fragment>
   );
 }

@@ -2,8 +2,9 @@ require("dotenv").config();
 
 module.exports = {
   plugins: [
-    `gatsby-plugin-sharp`,
-    `gatsby-transformer-sharp`,
+    "gatsby-plugin-mdx",
+    "gatsby-plugin-sharp",
+    "gatsby-transformer-sharp",
     {
       resolve: "gatsby-source-graphcms",
       options: {

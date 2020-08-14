@@ -28,3 +28,21 @@ exports.createPages = async ({ graphql, actions }) => {
   );
   ``;
 };
+
+exports.createResolvers = ({ createResolvers }) => {
+  const resolvers = {
+    GraphCMS_Product: {
+      formattedPrice: {
+        type: "String",
+        resolve: ({ price }) => {
+          return new Intl.NumberFormat("en-US", {
+            currency: "USD",
+            style: "currency",
+          }).format(price / 100);
+        },
+      },
+    },
+  };
+
+  createResolvers(resolvers);
+};

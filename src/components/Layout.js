@@ -6,8 +6,8 @@ export default function Layout({ children }) {
     <React.Fragment>
       <header>
         <Link to="/">Home</Link>
-        <button class="snipcart-checkout">
-          <span class="snipcart-items-count"></span> Cart
+        <button className="snipcart-checkout">
+          <span className="snipcart-items-count"></span> Cart
         </button>
       </header>
 

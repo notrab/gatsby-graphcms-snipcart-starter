@@ -2,9 +2,9 @@ import React from "react";
 import { Link } from "gatsby";
 import Img from "gatsby-image";
 
-export default function Product({ id, slug, name, image }) {
+export default function Product({ id, slug, name, image }, index) {
   return (
-    <Link key={id} to={`/${slug}`}>
+    <Link key={index} to={`/${slug}`}>
       {image && (
         <Img
           style={{ width: 250 }}
