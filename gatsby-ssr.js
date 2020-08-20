@@ -1,6 +1,7 @@
 import React from "react";
 import { MDXProvider } from "@mdx-js/react";
 
+import { CurrencyProvider } from "./src/context/CurrencyContext";
 import Layout from "./src/components/Layout";
 
 export const wrapPageElement = ({ element, ...props }) => (
@@ -8,7 +9,9 @@ export const wrapPageElement = ({ element, ...props }) => (
 );
 
 export const wrapRootElement = ({ element }) => (
-  <MDXProvider>{element}</MDXProvider>
+  <CurrencyProvider>
+    <MDXProvider>{element}</MDXProvider>
+  </CurrencyProvider>
 );
 
 export const onRenderBody = ({ setHeadComponents, setPreBodyComponents }) => {

@@ -3,6 +3,8 @@ import { graphql } from "gatsby";
 import { MDXRenderer } from "gatsby-plugin-mdx";
 import Img from "gatsby-image";
 
+import { useCurrencyState } from "../context/CurrencyContext";
+
 export const pageQuery = graphql`
   query ProductPageQuery($slug: String!) {
     graphCmsProduct(slug: { eq: $slug }) {
@@ -35,9 +37,11 @@ export const pageQuery = graphql`
 `;
 
 export default function ProductPage({ data: { graphCmsProduct }, location }) {
+  const { currency } = useCurrencyState();
   const { href } = location;
   const { id, name, prices, description, image } = graphCmsProduct;
-  const [price] = prices;
+  const activePrice = prices.find((p) => p.currency === currency);
+
   const currenciesAndPrices = JSON.stringify(
     prices.reduce(
       (current, state) => ({
@@ -51,7 +55,7 @@ export default function ProductPage({ data: { graphCmsProduct }, location }) {
   return (
     <React.Fragment>
       <h1>{name}</h1>
-      <p>{price.formatted}</p>
+      <p>{activePrice.formatted}</p>
 
       {image && (
         <Img
