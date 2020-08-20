@@ -8,8 +8,11 @@ export const pageQuery = graphql`
     graphCmsProduct(slug: { eq: $slug }) {
       id
       name
-      price
-      formattedPrice
+      prices {
+        amount
+        currency
+        formatted
+      }
       description {
         markdownNode {
           childMdx {
@@ -33,19 +36,22 @@ export const pageQuery = graphql`
 
 export default function ProductPage({ data: { graphCmsProduct }, location }) {
   const { href } = location;
-  const {
-    id,
-    name,
-    price,
-    formattedPrice,
-    description,
-    image,
-  } = graphCmsProduct;
+  const { id, name, prices, description, image } = graphCmsProduct;
+  const [price] = prices;
+  const currenciesAndPrices = JSON.stringify(
+    prices.reduce(
+      (current, state) => ({
+        [state.currency.toString().toLowerCase()]: state.amount,
+        ...current,
+      }),
+      {}
+    )
+  ).replace(/"/g, "&quot;");
 
   return (
     <React.Fragment>
       <h1>{name}</h1>
-      <p>{formattedPrice}</p>
+      <p>{price.formatted}</p>
 
       {image && (
         <Img
@@ -60,7 +66,7 @@ export default function ProductPage({ data: { graphCmsProduct }, location }) {
       <button
         className="snipcart-add-item"
         data-item-id={id}
-        data-item-price={price / 100}
+        data-item-price={currenciesAndPrices}
         data-item-url={href}
         data-item-image={image.url}
         data-item-name={name}

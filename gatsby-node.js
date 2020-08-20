@@ -1,3 +1,4 @@
+const currencyFormatter = require("currency-formatter");
 const path = require("path");
 
 const PRODUCTS_QUERY = `
@@ -26,19 +27,15 @@ exports.createPages = async ({ graphql, actions }) => {
       path: `/${slug}`,
     })
   );
-  ``;
 };
 
 exports.createResolvers = ({ createResolvers }) => {
   const resolvers = {
-    GraphCMS_Product: {
-      formattedPrice: {
+    GraphCMS_Price: {
+      formatted: {
         type: "String",
-        resolve: ({ price }) => {
-          return new Intl.NumberFormat("en-US", {
-            currency: "USD",
-            style: "currency",
-          }).format(price / 100);
+        resolve: ({ amount, currency: code }) => {
+          return currencyFormatter.format(amount / 100, { code });
         },
       },
     },
